@@ -1,10 +1,11 @@
-//============================================================================
-// Name: Main.cpp
-// Author: David Ping
-// Date: 3 Aug. 2017
-// Description : Main class - Defines the entry point for the console application.
-//============================================================================
-
+/*
+============================================================================
+ Name: Main.cpp
+ Author: David Ping
+ Date: 3 Aug. 2017
+ Description : Main class - Defines the entry point for the console application.
+============================================================================
+*/
 #include "Main.h"
 
 //@param argc, argv - the number or command line arguments and their vectors
@@ -51,48 +52,48 @@ int main(int argc, char *argv[]) {
 			i++;
 			outputFile = argv[i];
 		} else {
-			std::cerr << "Invalid argument" << std::endl;
+			std::cerr << "Invalid arguments" << std::endl;
 			return -1;
 		}
 	}
 
-	//Verifies and initialize the data structure
-	std::unique_ptr<DataStructure> ds = f.getDataStructure(dataStructure);
-	std::unique_ptr<DataStructure> ds2 = f.getDataStructure(dataStructure);
+	//Verifies and initialize the data structure using the factory
+	std::unique_ptr<DataStructure> inputFileDS = f.getDataStructure(dataStructure);
+	std::unique_ptr<DataStructure> dictionaryDS = f.getDataStructure(dataStructure);
 
 	//Reads the contents of the files and add them to the data structures
 
-	clock_t startTime = clock();
-			std::cout << "Start Time: " << startTime << std::endl;
+	/*clock_t startTime = clock();
+			std::cout << "Start Time: " << startTime << std::endl;*/
 
-	readFile(textFile, ds);
+	readFile(textFile, inputFileDS);
 
-	clock_t endTime = clock();
+	/*clock_t endTime = clock();
 			std::cout << "End Time: " << endTime << std::endl;
 			clock_t clockTicksTaken = endTime - startTime;
 			double timeInSeconds = clockTicksTaken / (double) CLOCKS_PER_SEC;
 
-			std::cout << "Time taken to add (seconds): " << timeInSeconds << std::endl;
+			std::cout << "Time taken to add (seconds): " << timeInSeconds << std::endl;*/
 
-	readFile(dictionary, ds2);
+	readFile(dictionary, dictionaryDS);
 
 	/**
 	 * Goes through every character in the data structure for text file and compare it against
 	 * the other data structure containing the dictionary
 	 * */
 
-	clock_t startTime2 = clock();
-				std::cout << "Start Time2: " << startTime2 << std::endl;
+	/*clock_t startTime2 = clock();
+				std::cout << "Start Time2: " << startTime2 << std::endl;*/
 
-	ds.operator *().checkFile(ds2, outputFile);
+	inputFileDS.operator *().checkFile(dictionaryDS, outputFile);
 
-	clock_t endTime2 = clock();
+	/*clock_t endTime2 = clock();
 					std::cout << "End Time2: " << endTime2 << std::endl;
 					clock_t clockTicksTaken2 = endTime2 - startTime2;
 					double timeInSeconds2 = clockTicksTaken2 / (double) CLOCKS_PER_SEC;
 
 					std::cout << "Time taken to check (seconds): " << timeInSeconds2 << std::endl;
-
+*/
 	//Writes the contents of the map containing the count of each word to the output file
 	util.writeMap();
 
@@ -125,7 +126,7 @@ void readFile(std::string fileName, std::unique_ptr<DataStructure> &ds) {
 		for (tokenizer::iterator it = tokens.begin(); it != tokens.end();
 				it++) {
 			//Adds the token to the data structure
-			ds.operator *().add(*it);
+			ds->add(*it);
 			empty=false;
 		}
 	}
